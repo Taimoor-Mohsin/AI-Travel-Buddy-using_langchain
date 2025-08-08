@@ -34,6 +34,3 @@ ai-travel-buddy/
 
 ## Next Steps
 
-1. Build the BaseAgent interface  
-2. Define the Supervisor graph  
-3. Implement the Destination Parser agent  
