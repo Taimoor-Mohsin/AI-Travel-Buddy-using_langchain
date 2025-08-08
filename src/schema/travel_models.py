@@ -30,3 +30,4 @@ class TravelBuddyState(BaseModel):
     hotel_options: Optional[List[Dict[str, Any]]] = None
     itinerary: Optional[List[str]] = None
     packing_list: Optional[List[str]] = None
+    reminders: Optional[List[Dict[str, Any]]] = None

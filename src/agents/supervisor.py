@@ -22,19 +22,20 @@ class TravelBuddySupervisor:
         self.graph.add_node("flight_hotel_scraper", FlightHotelScraperAgent())
         self.graph.add_node("itinerary_agent", ItineraryAgent())
         self.graph.add_node("packing_list_agent", PackingListAgent())
-        # self.graph.add_node("reminder_agent", ReminderAgent())
+        self.graph.add_node("reminder_agent", ReminderAgent())
 
         # Define the data flow (edges)
         self.graph.add_edge("destination_parser", "flight_hotel_scraper")
         self.graph.add_edge("flight_hotel_scraper", "itinerary_agent")
         self.graph.add_edge("itinerary_agent", "packing_list_agent")
-        # self.graph.add_edge("packing_list_agent", "reminder_agent")
+        self.graph.add_edge("packing_list_agent", "reminder_agent")
 
         # Set entry and exit nodes
         self.graph.set_entry_point("destination_parser")
         # self.graph.set_finish_point("flight_hotel_scraper") #tested, it works
         # self.graph.set_finish_point("itinerary_agent") #tested, it works
-        self.graph.set_finish_point("packing_list_agent")
+        # self.graph.set_finish_point("packing_list_agent") #testes, it works
+        self.graph.set_finish_point("reminder_agent")
         # self.graph.set_exit_node("reminder_agent")
 
     def run(self, user_input):
