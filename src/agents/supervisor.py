@@ -6,6 +6,7 @@ from src.agents.itinerary_agent import ItineraryAgent
 from src.agents.packing_list_agent import PackingListAgent
 from src.agents.reminder_agent import ReminderAgent
 from src.schema.travel_models import TravelBuddyState
+from typing import Optional, List, Dict, Any, Union
 
 
 class TravelBuddySupervisor:
@@ -38,9 +39,22 @@ class TravelBuddySupervisor:
         self.graph.set_finish_point("reminder_agent")
         # self.graph.set_exit_node("reminder_agent")
 
-    def run(self, user_input):
-        # Initial state starts with user's raw input
-        state = {"user_input": user_input}
-        # Run the workflow graph
+    def run(self, state: Union[str, Dict[str, Any], TravelBuddyState]):
+        # 🔒 Coerce input safely (NO double-wrapping!)
+        if isinstance(state, str):
+            state = {"user_input": state}
+        elif isinstance(state, TravelBuddyState):
+            state = state.model_dump()  # already valid
+        elif isinstance(state, dict):
+            # Do NOT wrap; assume it's already flat
+            if isinstance(state.get("user_input"), dict):
+                # Defensive fix if something upstream nested it
+                state["user_input"] = state["user_input"].get("user_input", "")
+        else:
+            raise TypeError(f"Unsupported input type: {type(state)}")
+
+        # 🔍 Extra debug – leave this for now
+        print("SUPERVISOR BEFORE INVOKE ->", state, type(state.get("user_input")))
+
         result = self.runnable_graph.invoke(state)
         return result
